@@ -1,0 +1,86 @@
+BARÇA COMPANION — HANDOFF FOR A NEW CHATGPT ACCOUNT
+
+Use this as the project handoff. The attached source files are the latest files available from the previous ChatGPT account.
+
+PROJECT GOAL
+Re-create and continue the Barça Companion web app without changing its existing visual layout.
+
+NON-NEGOTIABLE DESIGN REQUIREMENT
+Do NOT redesign or rearrange the existing app. Preserve the existing layout, styling, colors, typography, navigation, home page, roster page, and player page unless a requested feature absolutely requires a tiny functional addition.
+
+CURRENT APP FEATURES / REQUIREMENTS
+1. App name: Barça Companion.
+2. Add/keep a Roster tab/button matching the existing design.
+3. Roster page shows the current FC Barcelona starting XI in a column.
+4. Tapping a player opens that player's statistics page.
+5. Player stats are separated into La Liga and Champions League.
+6. Outfield-player stats: Games Played, Goals, Assists, Yellow Cards, Red Cards.
+7. Joan García is a goalkeeper, so his stats page should show Games Played, Saves, Clean Sheets, Yellow Cards, Red Cards. Do NOT show Goals/Assists for Joan García.
+8. Live stats should use Big Balls Sports Data, NOT API-Football.
+9. The user has a Big Balls Sports Data API key. Never hard-code or display the key in source code. Provide an API KEY input and store it locally if appropriate.
+10. Automatically look up each player's Big Balls Data player UUID/ID by name. The user must NOT manually enter UUIDs.
+11. Use the returned UUID to request that player's season stats.
+12. Refresh stats after completed games when the provider has processed the match.
+13. Verify the current roster and current starting XI from reliable current sources before replacing roster data. Do not invent stats.
+14. Current season target: 2026/27.
+15. Keep La Liga and Champions League statistics separate.
+16. Accuracy matters: the user previously found incorrect/old roster and stats.
+17. If an API does not provide a statistic, say so rather than inventing it.
+
+BIG BALLS DATA DETAILS CONFIRMED BY THE USER
+- The user's Big Balls Sports Data API connection worked and was reported as live.
+- Dashboard showed a free plan with 100 requests/minute and 2,000 requests/day.
+- Authentication shown by the provider uses: Authorization: Bearer <API_KEY>.
+- Provider example uses @bigballsdata/sdk and BigBallsSportsClient.
+- The API Explorer's player stats endpoint requires a Big Balls UUID, not a player name.
+- The API Explorer did not expose a convenient player-search endpoint in its dropdown.
+- IMPORTANT: the latest code contains an attempted automatic lookup, but it was NOT successfully verified against a real player response. Test the exact current Big Balls Data endpoints before claiming live stats work.
+
+CURRENT BIG BALLS DATA INTEGRATION (PLAYER COVERAGE NOT YET LIVE-VERIFIED)
+- The app keeps the API key in browser local storage; never include it in source or a ZIP.
+- Upcoming games use GET /v1/matches?sport=football&league=laliga and league=ucl.
+- The home page's Recent results card and form strip are refreshed from finished Barça matches in those same match lists and cached locally. Upcoming match dates/times are rendered in the America/Los_Angeles time zone with the correct PDT/PST abbreviation; date-only API entries show Time TBA.
+- The home-page La Liga mini-table and Barça summary use GET /v1/standings?sport=football&league=laliga. It refreshes on app start and with LIVE DATA, and caches the latest response locally.
+- Current La Liga stats first resolve FC Barcelona's team id from standings, then look up roster player ids from GET /v1/stored/players?sport=football&league=laliga&team=<team-id>&limit=200, and request GET /v1/players/{id}/club-form?season=2026. The free club-form route can provide appearances, goals, assists, minutes and cards when Big Balls has linked and stored the player row. The app falls back to the top-scorers leaderboard for players with no club-form row.
+- A small app status message reports how many hard-coded listed players returned La Liga stats. The full unavailable-name list is saved locally in barca_companion_live_stats_status; no key is included.
+- The documented API does not provide a current football club-roster capability. Keep the saved starting XI and do not label it a live full squad.
+- The general /v1/players/{id}/stats route is documented as unavailable for football; use /club-form for its narrower supported football season fields. Current UCL season stats and goalkeeper saves/clean sheets are not supplied by these endpoints; show unavailable values as a dash, not zero. Goalkeeper cards may be populated if present in club-form.
+- Do not claim the integration works until real responses have been tested using the user's key entered locally in the app.
+
+CURRENT SOURCE FILES
+- Barca_Companion_Updated.js — latest attempted Big Balls Data version.
+- index(1).html — app shell; it loads bundle.min.js and manifest.json.
+- manifest.json — PWA manifest for Barça Companion.
+- FC Barcelona Crest on Striped Background.png — approved Barça crest/icon reference.
+
+HOME PAGE / VISUALS
+The user requested the FC Barcelona team-huddle photo they supplied as the home-page background. Do not substitute a different image unless the user asks.
+The user also supplied/approved an FC Barcelona crest image as the app icon.
+
+IMPORTANT HISTORY
+- Earlier version used API-Football and failed because the free plan did not support the current season.
+- User chose Big Balls Sports Data instead.
+- User wants the existing layout exactly the same.
+- User previously reported that Lamine Yamal's goals and other player stats were inaccurate, so do not use stale hard-coded stats.
+- User specifically requested Games Played.
+- User specifically requested Joan García's Saves + Clean Sheets instead of Goals + Assists.
+- User wants a properly working, non-empty project and tested ZIP when possible.
+
+WHAT TO DO FIRST
+1. Inspect all attached source files before changing anything.
+2. Preserve the current design.
+3. Inspect the JavaScript for the exact roster/UI.
+4. Verify Big Balls Data's current player lookup and player-season-stat endpoints using current provider documentation/API behavior.
+5. Test at least one real Barça player lookup and one real stats response before declaring the integration complete.
+6. Test Joan García separately because goalkeeper fields differ.
+7. Test La Liga and Champions League separately.
+8. Rebuild/package the app.
+9. Provide a ZIP containing all required files and verify it is not empty and index.html references the correct bundle filename.
+10. Never expose the user's API key in the ZIP or chat.
+
+DO NOT
+- Do not redesign the app.
+- Do not invent stats.
+- Do not make the user manually enter 11 UUIDs.
+- Do not claim live stats work until a real API response has been tested.
+- Do not replace the approved home background or icon without asking.

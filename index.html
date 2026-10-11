@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Barça Companion</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0B1B2B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Barça Companion" />
+<link rel="apple-touch-icon" href="icon-180.png" />
+<link rel="icon" href="icon-192.png" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap');
+  html, body { margin: 0; padding: 0; background: #0B1B2B; }
+  #root { min-height: 100vh; }
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box; }
+</style>
+<script>
+  window.addEventListener('error', function (e) {
+    var root = document.getElementById('root');
+    if (root && !root.hasChildNodes()) {
+      root.innerHTML = '<pre style="color:#ff8a80;background:#0B1B2B;padding:20px;white-space:pre-wrap;font-size:14px;font-family:monospace;">Error loading app:\n' +
+        (e.message || 'Unknown error') + (e.filename ? ('\n' + e.filename + ':' + e.lineno) : '') + '</pre>';
+    }
+  });
+</script>
+<script defer src="https://unpkg.com/tone@14.8.49/build/Tone.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script src="bundle.min.js"></script>
+</body>
+</html>
